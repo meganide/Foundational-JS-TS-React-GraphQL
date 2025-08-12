@@ -79,6 +79,9 @@ We use useEffect for side effects because it lets React run them after rendering
 ## Keys in React
 Used to uniquely identify virtual DOM elements. They are used to optimize rendering. They help React to identify which items have changed, are added, or are removed, enabling it to reuse already existing DOM elements, thus providing a performance boost.
 
+Do not use array indices for keys, as this can cause bugs.
+When you update, add, or remove items in the array, the indices of the remaining items change. React uses the keys to match existing elements with new ones during its reconciliation process. If the keys are just indices, React may mistakenly think that an item is the same as a previous one at that position, leading to incorrect reuse of DOM elements and component state.
+
 ## Controlled vs uncontrolled input
 Controlled components rely on the React state to manage the form data while uncontrolled components use the DOM itself to handle the form data often with useRef.
 
