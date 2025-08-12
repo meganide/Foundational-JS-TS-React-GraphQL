@@ -1,4 +1,12 @@
+# React
 
+## Core principles of React
+- Virtual DOM
+- Component-based. React uses reusable, self contained pieces of UI that manage their own state and behavior.
+- Declarative. Instead of manipulating the DOM directly, you say what you want to happen based on the current state. React handles all the DOM stuff to match what you said. For example instead of writing imperative code to show/hide elements, you simply declare:
+```javascript
+{isVisible && <Component />}
+```
 
 ## JSX
 Javascript XML, which is basically HTML in javascript files. JSX gets converted into javascript function calls by Babel. For instance, <div>Hello, world!</div> is transformed into 
@@ -8,6 +16,24 @@ React.createElement('div', null, 'Hello, world!').
 
 ### How do browsers read JSX?
 Browsers cant read JSX. We use a transpiler (Babel) to convert JSX to JS.
+
+## State
+Internal data within a component that can change over time
+- State updates trigger rerenders
+- State updates are asynchronous. If the state update relies on previous state value, use the functional update form.
+
+## Hooks
+Functions that let you hook into core React features from function components
+- Only call them at the top level. React relies on the hooks being called in the smae order every render to maintain state correctly.
+- **useContext:** Subscribes to React context without nesting
+    - Enables sharing values between components without prop drilling
+    - Great for global state like themes or user data (state rarely change)
+- **useReducer:** Alternative to useState for complex state logic
+- **useRef:** Creates a muable reference that persists across renders
+- **useMemo:** Memozies expensive calculations between renders
+- **useCallback:** Returns a momized callback function
+    - Prevents unnecessary renders in child components that rely on callback functions
+- **useLayoutEffect:** Similar to useEffect but fires synchronously after DOM mutations and before the first paint.
 
 ## Hydration
 When we have server side rendering and send back the HTML from the server to the client we still need to add the interactivity (JS) back to it. Hydration is the step where we connect Javascript logic back to the HTML.
