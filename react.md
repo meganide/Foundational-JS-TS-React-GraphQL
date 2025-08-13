@@ -9,7 +9,9 @@
 ```
 
 ## JSX
-Javascript XML, which is basically HTML in javascript files. JSX gets converted into javascript function calls by Babel. For instance, <div>Hello, world!</div> is transformed into 
+Javascript XML, which is basically HTML in javascript files. JSX gets converted into javascript function calls by Babel. For instance, 
+
+`<div>Hello, world!</div>` is transformed into 
 ```javascript
 React.createElement('div', null, 'Hello, world!').
 ```
@@ -22,18 +24,59 @@ Internal data within a component that can change over time
 - State updates trigger rerenders
 - State updates are asynchronous. If the state update relies on previous state value, use the functional update form.
 
+When you call:
+```tsx
+setCount(count + 1)
+console.log(count) // Might still log the old value
+```
+
+The state doesn't change immediately. React shedules the update and processes it later.
+If you try to access the state right after the update you might still see the old value until the next render.
+
+If your new state value depends on the previous one, async updates can cause problems.
+
+```tsx
+setCount(count + 1)
+setCount(count + 1) // both see the same old `count`
+```
+
+If count was 0, you might expect it to become 2, but it becomes 1 since both updates use the old count.
+
+To solve this use the functional form:
+```tsx
+setCount(prevCount => prevCount + 1)
+setCount(prevCount => prevCount + 1)`
+```
+
+Here prevCount is guaranteed to be the latest state value at the time of the update, so you'll correctly get 2.
+
+
+## Re-rendering
+React re-renders only when state or props change. The engine works by:
+1. Detecting that state or props changed
+2. Running your component function again to produce the new UI
+3. Updating the DOM efficiently
+
 ## Hooks
 Functions that let you hook into core React features from function components
-- Only call them at the top level. React relies on the hooks being called in the smae order every render to maintain state correctly.
+- Only call them at the top level. React relies on the hooks being called in the same order every render to maintain state correctly.
+- **useState:** Store a value across re-renders and automatically re-render the component when that value changes.
 - **useContext:** Subscribes to React context without nesting
     - Enables sharing values between components without prop drilling
     - Great for global state like themes or user data (state rarely change)
 - **useReducer:** Alternative to useState for complex state logic
 - **useRef:** Creates a muable reference that persists across renders
 - **useMemo:** Memozies expensive calculations between renders
-- **useCallback:** Returns a momized callback function
+- **useCallback:** Returns a memoized callback function
     - Prevents unnecessary renders in child components that rely on callback functions
-- **useLayoutEffect:** Similar to useEffect but fires synchronously after DOM mutations and before the first paint.
+- **useEffect:** Runs after the component renders and the browser has painted the UI. "React is done painting, now I'll run this".
+    - Timing: Asynchronous, non-blocking.
+    - Good for: API calls, subscriptions, timers — anything that doesn’t need to block visual updates.
+    - Example: fetching data and then updating state with the results.
+- **useLayoutEffect:** Runs synchronously after DOM updates but before the browser paints. "Wait! Before you show anything, let me tweak or measure something!"
+    - Timing: Blocking, runs before the user sees the screen.
+    - Good for: Measuring DOM size/position, synchronizing layout, making visual adjustments to prevent flicker.
+    - Example: measuring an element’s height and updating layout before the user sees it.
 
 ## Hydration
 When we have server side rendering and send back the HTML from the server to the client we still need to add the interactivity (JS) back to it. Hydration is the step where we connect Javascript logic back to the HTML.
@@ -75,6 +118,32 @@ You use the useEffect hook to handle side effecs in React.
 In React, a side effect is any interaction with the outside world or changes outside the component’s rendering — things React can’t handle purely by just rendering JSX.
 
 We use useEffect for side effects because it lets React run them after rendering, in a controlled, efficient, and clean way — keeping the render phase pure and predictable.
+
+## React lifecycle timeline
+
+### **Render Phase**
+- Function components run (top-level code executes) to figure out what the UI should look like.
+- All top level const declarations are run.
+- `useMemo` and `useCallback` run if dependencies changed.
+- UseState and useRef value retrievals
+- Effects (`useEffect`, `useLayoutEffect`) are *registered*, not run.
+- React builds a “virtual DOM” diff.
+
+### **Pre-Commit** (still render phase)
+- React finishes diffing and prepares DOM changes.
+- No DOM mutations yet.
+
+### **Commit Phase**
+- React mutates the real DOM.
+- **Cleanup old layout effects** from the previous render.
+- **Run new layout effects** (`useLayoutEffect`) synchronously.
+- Browser paints UI changes. This is when we see the updated UI.
+- **Cleanup old passive effects** (`useEffect`) from the previous render.
+- **Run new passive effects** (`useEffect`) asynchronously.
+
+### **Idle Phase**
+- Nothing scheduled, React is waiting for changes.
+- Can run low-priority or background work.
 
 ## Keys in React
 Used to uniquely identify virtual DOM elements. They are used to optimize rendering. They help React to identify which items have changed, are added, or are removed, enabling it to reuse already existing DOM elements, thus providing a performance boost.

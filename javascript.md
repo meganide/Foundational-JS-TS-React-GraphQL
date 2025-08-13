@@ -4,7 +4,30 @@
 Javascript is single threaded, meaning it can execute one piece of code at a time.
 In order to avoid freezing the entire app while we do long running tasks like API calls, background jobs, I/O etc. we have the event loop in which we can send these tasks to run in the background to not block the main thread.
 
-The event loop is JavaScript's mechanism for handling asynchronous operations. The call stack executes synchronous code, while the event loop manages the callback queue and microtask queue, processing them when the call stack is empty.
+The event loop decides the order in which JavaScript runs code, both synchronous and asynchronous.
+- Synchronous code runs directly in the call stack.
+- Asynchronous code is delegated to browser/Node APIs, then placed in the microtask or macrotask queue.
+- The event loop moves queued tasks into the call stack only when it’s empty, always running microtasks before macrotasks.
+
+### Microtasks vs Macrotasks
+Two different waiting lines for async work, with microtasks having VIP priority.
+
+1. **Microtasks**
+- High priority, run right after the call stack is empty
+- Examples:
+    - Promise `.then` callback
+    - `await` resolution
+    - `MutationObserver` callbacks
+- Used for small, quick jobs that must happen before the browser paints again
+
+2. **Macrotasks**
+- Lower priority - runs after microtasks are cleared
+- Examples:
+    - `setTimeout`
+    - `setInterval`
+    - `setImmediate`
+    - `I/O` callback
+
 
 ## Race conditions
 A race condition happens when two or more parts of a program try to access or modify shared data at the same time, and the final result depends on the order in which things happen — which is often unpredictable.
@@ -150,3 +173,23 @@ deep.address.city = "LA";
 
 console.log(original.address.city); // "NY" → completely separate
 ```
+
+## Promises
+A promise in JS is like a placeholder for a value you'll get later (after som async work finishes).
+
+It can be in one of three states:
+1. Pending - still waiting for result
+2. Fulfilled - got the result successfully
+3. Rejected - something went wrong
+
+A promise is like ordering food at a restaurant.
+1. You get a promise (the order ticket) right away
+2. Later, the food arrives (fulfilled) or they tell you they're out of it (rejected)
+3. You can decide what to do in either case
+
+## Async/Await
+`async` marks a function as asynchronous, meaning it always returns a promise. "The function might take time, but I'll give you a promise"
+`await` pauses the function until a promise is settled (resolved or rejected), then returns the resolved value. "Hold on, I'll wait for this to finish before moving on."
+
+
+
