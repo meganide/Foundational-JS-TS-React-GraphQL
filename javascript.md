@@ -93,16 +93,16 @@ set it to empty, for example accessing a variable that doesn't exist. It means "
 The *this* keyword in JS is a special keyword that refers to the object that is currently executing the code. It varies depending on where you use it.
 
 1. Regular functions
-- They create their own this based on how they are called.
-- When you call them:
-    - As an object method → this = that object.
-    - As a plain function → this = global object (or undefined in strict mode).
-    - As a constructor (new) → this = the new instance.
+    - They create their own this based on how they are called.
+    - When you call them:
+        - As an object method → this = that object.
+        - As a plain function → this = global object (or undefined in strict mode).
+        - As a constructor (new) → this = the new instance.
 
 2. Arrow functions
-- They do NOT create their own this.
-- Instead, they lexically inherit this from the scope in which they were defined.
-- The this inside an arrow function is locked in when the function is created.
+    - They do NOT create their own this.
+    - Instead, they lexically inherit this from the scope in which they were defined.
+    - The this inside an arrow function is locked in when the function is created.
 
 ## `bind`, `call`, `apply` methods
 They manually let you set what `this` will be when a function runs.

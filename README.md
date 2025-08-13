@@ -1,3 +1,11 @@
 Grinding/refreshing the fundamentals again.
 
-Javascript/Typescript/React/GraphQL
+Here are my notes on the topics:
+
+[Javascript](javascript.md)
+
+[Typescript](typescript.md)
+
+[React](react.md)
+
+[GraphQL](graphql.md)
