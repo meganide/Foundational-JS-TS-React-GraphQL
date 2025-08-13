@@ -11,7 +11,7 @@ GraphQL solves the problem of over- or under-fetching, we get exactly what we as
 
 ## GraphQL Schema
 Describes the types of data that can be queried and mutated, the relationships between these types, and the queries and mutations that are available.
-It acts as a contract that specifies what information the client may reuqest and how the server will respond.
+It acts as a contract that specifies what information the client may request and how the server will respond.
 
 ## Scalar types
 Basic data types that represent single values: 
