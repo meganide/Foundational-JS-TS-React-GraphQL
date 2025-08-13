@@ -31,6 +31,9 @@ Typescript automatically infers the type of a variable from its initial values w
 - **Union ( | ):** A value that can be of multiple types
 - **Intersection ( & ):** A value must satisfy multiple types at once
 
+## Void
+The void type represents the unavailability of the data type for any variable. Used for functions that return nothing.
+
 ## Literal types
 A type that represent a specific value
 
